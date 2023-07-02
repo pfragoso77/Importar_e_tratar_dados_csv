@@ -1,19 +1,19 @@
 #PFragoso
 
-#TAREFA 1: Importei dados com módulo 'Pandas'
+#TAREFA 1: Importei os dados com módulo 'Pandas'
 import pandas as pd
 
 ficheiro_dados = pd.read_csv('AtividadePedagogica4_10793_02.csv')
 print(ficheiro_dados)
 
-# Importei o módulo 'Pandas' que permite a análise e manipulação de dados, incluindo ficheiros em csv. Em alterantiva podíamos importar o módulo 'csv' para trabalhar especificamente com ficheiros csv.
+# O módulo 'Pandas' permite a análise e manipulação de dados, incluindo ficheiros em csv. Em alternativa podíamos importar o módulo 'csv' para trabalhar especificamente com ficheiros csv.
 
 #TAREFA 2: Aplica 2 Algoritmos de Ordenação ('bubble_sort' e 'counting_sort')
 
-# opção bubble_sort
+# 1ª opção bubble_sort
 print('______bubble_sort_______')
 
-# definição da função que faz a contagem dos dados
+# definição da função que faz a contagem dos dados com função 'len' e função 'for'
 def bubble_sort(produtos):
     n = len(produtos)
     for i in range(n - 1):
@@ -28,49 +28,53 @@ produtos = ficheiro_dados.to_dict('records')
 # Chama a função bubble_sort para ordenar os produtos pela quantidade vendida
 bubble_sort(produtos)
 
+# Exibe os campos ordenados, transformando em linhas os nomes das colunas do ficheiro csv
+for produto in produtos:
+    print(f"Data: {produto['data']}, Produto: {produto['produto']}, Preço Unitário: {produto['preco_unitario']}, Quantidade Vendida: {produto['quantidade_vendida']}")
+
+# 2ª opção counting_sort
+print('______counting_sort_______')
+
+# definição da função que faz a contagem dos dados com função 'max_value' e função 'count'
+def counting_sort(produtos):
+    max_value = max(produto['quantidade_vendida'] for produto in produtos)
+    count = [0] * (max_value + 1) # Cria uma lista de contagem
+    
+    for produto in produtos:
+        count[produto['quantidade_vendida']] += 1 # Conta a frequência de cada valor (vezes que cada produto aparece)
+
+    for i in range(1, len(count)):
+        count[i] += count[i - 1]
+
+    sorted_produtos = [None] * len(produtos) # Lista auxiliar para armazenar produtos ordenados
+    # Ordena os produtos
+    for produto in produtos: 
+        index = count[produto['quantidade_vendida']] - 1
+        sorted_produtos[index] = produto
+        count[produto['quantidade_vendida']] -= 1
+    # Atualiza a lista original de produtos
+    produtos[:] = sorted_produtos
+# Converte os dados para uma lista de dicionários
+produtos = ficheiro_dados.to_dict('records')
+
+counting_sort(produtos)
 # Exibe os produtos ordenados
 for produto in produtos:
     print(f"Data: {produto['data']}, Produto: {produto['produto']}, Preço Unitário: {produto['preco_unitario']}, Quantidade Vendida: {produto['quantidade_vendida']}")
 
-# opção counting_sort
-print('______counting_sort_______')
+#TAREFA 3: Apresentar resultados com gráfico de barras
 
-def counting_sort(produtos):
-    # Encontra o valor máximo da coluna "quantidade_vendida"
-    max_value = max(produto['quantidade_vendida'] for produto in produtos)
+import matplotlib.pyplot as plt
 
-    # Cria uma lista com o tamanho máximo encontrado
-    count = [0] * (max_value + 1)
+nomes_produtos = [produto['produto'] for produto in produtos]
+quantidades_vendidas = [produto['quantidade_vendida'] for produto in produtos]
 
-    # Conta a frequência de cada valor da coluna "quantidade_vendida"
-    for produto in produtos:
-        count[produto['quantidade_vendida']] += 1
+plt.bar(range(len(nomes_produtos)), quantidades_vendidas)
+plt.xlabel('Produtos')
+plt.ylabel('Quantidade Vendida')
+plt.title('Quantidade Vendida por Produto')
 
-    # Atualiza as contagens para obter as posições corretas no resultado
-    for i in range(1, len(count)):
-        count[i] += count[i - 1]
+plt.xticks(range(len(nomes_produtos)), nomes_produtos, rotation=90)
 
-    # Cria uma lista auxiliar para armazenar os produtos ordenados
-    sorted_produtos = [None] * len(produtos)
+plt.show()
 
-    # Ordena os produtos com base na coluna "quantidade_vendida"
-    for produto in reversed(produtos):
-        index = count[produto['quantidade_vendida']] - 1
-        sorted_produtos[index] = produto
-        count[produto['quantidade_vendida']] -= 1
-
-    # Atualiza a lista original de produtos com os produtos ordenados
-    produtos[:] = sorted_produtos
-
-
-# Converte os dados para uma lista de dicionários
-produtos = ficheiro_dados.to_dict('records')
-
-# Chama a função counting_sort para ordenar os produtos pela quantidade vendida
-counting_sort(produtos)
-
-# Exibe os produtos ordenados
-for product in produtos:
-    print(f"Data: {produto['data']}, Produto: {produto['produto']}, Preço Unitário: {produto['preco_unitario']}, Quantidade Vendida: {produto['quantidade_vendida']}")
-
-#TAREFA 3 Apresentar Resultados:
