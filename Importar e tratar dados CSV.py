@@ -4,7 +4,7 @@
 import pandas as pd
 
 ficheiro_dados = pd.read_csv('AtividadePedagogica4_10793_02.csv')
-print(ficheiro_dados)
+print(ficheiro_dados) # apresentar os dados inscritos no ficheiro csv
 
 # O módulo 'Pandas' permite a análise e manipulação de dados, incluindo ficheiros em csv. Em alternativa podíamos importar o módulo 'csv' para trabalhar especificamente com ficheiros csv.
 
@@ -63,18 +63,19 @@ for produto in produtos:
     print(f"Data: {produto['data']}, Produto: {produto['produto']}, Preço Unitário: {produto['preco_unitario']}, Quantidade Vendida: {produto['quantidade_vendida']}")
 
 #TAREFA 3: Apresentar resultados com gráfico de barras
-
+# Importei a biblioteca matplotlib para criação do gráfico de barras
 import matplotlib.pyplot as plt
-
+# criar as variáveis para chamar os dados que vão aparecer no gráfico
 nomes_produtos = [produto['produto'] for produto in produtos]
 quantidades_vendidas = [produto['quantidade_vendida'] for produto in produtos]
 
+# ordenação dos campos no gráfico
 plt.bar(range(len(nomes_produtos)), quantidades_vendidas)
 plt.xlabel('Produtos')
 plt.ylabel('Quantidade Vendida')
 plt.title('Quantidade Vendida por Produto')
-
+# ordenação em forma ascendente
 plt.xticks(range(len(nomes_produtos)), nomes_produtos, rotation=90)
-
+# apresentar o gráfico com a função 'show'
 plt.show()
 
